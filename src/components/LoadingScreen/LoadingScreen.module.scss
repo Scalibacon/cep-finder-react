@@ -1,0 +1,40 @@
+.background{
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(1,1,1,0.5);
+  z-index: 100;
+
+  &.active{
+    display: flex;
+  }
+
+  &>div{
+    padding: 2.3rem 2.3rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    background-color: white;
+    color: rgb(var(--theme-color));
+    box-shadow: 0 0 10px 1px rgba(1,1,1,0.3);
+  }
+}
+
+.spinner{
+  border: 10px solid rgb(235,235,235);
+  border-top: 10px solid rgb(var(--theme-color));
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1.5s ease-in-out infinite;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
