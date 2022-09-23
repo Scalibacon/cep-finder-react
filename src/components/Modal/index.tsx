@@ -1,4 +1,6 @@
 import { ReactNode } from 'react';
+import { IoMdClose } from 'react-icons/io';
+
 import styles from './Modal.module.scss';
 
 type ModalProps = {
@@ -19,11 +21,15 @@ const Modal = ({
       onClick={ e => onClose(false)}
     >
       <section className={styles.wrapper} onClick={ e => e.stopPropagation() }>
-        <header></header>
+        <header>
+          <IoMdClose size={27} onClick={e => onClose(false)}/>
+        </header>
         <main>
           {children}
         </main>   
-        <footer></footer>     
+        <footer>
+          <button type='button' className={`alternative`} onClick={e => onClose(false)}>Fechar</button>
+        </footer>     
       </section>      
     </div>
   )

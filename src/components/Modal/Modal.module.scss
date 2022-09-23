@@ -24,7 +24,16 @@
 
   &>header{
     height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
     background-color: rgb(var(--theme-color));
+
+    svg{
+      // color: rgb(255,66,66);
+      color: white;
+      cursor: pointer;
+    }    
   }
 
   &>main{
@@ -34,7 +43,16 @@
   }
 
   &>footer{
-    height: 35px;
+    min-height: 35px;
+    padding: 0.3rem 0.3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border-top: solid 1.5px rgba(25,25,25,0.2);
+
+    button{
+      font-size: 0.8rem !important;
+      padding: 0.7rem 0.7rem;
+    }
   }
 }

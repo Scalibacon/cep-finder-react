@@ -37,12 +37,6 @@
 
   button{
     padding: 0.7rem 1.1rem;
-
-    &.back{
-      color: rgb(var(--theme-color));
-      background-color: white;
-      border: solid 1.5px rgb(var(--theme-color));
-    }
   }
 }
 
@@ -76,10 +70,5 @@
 
   &:not(:first-child){
     border-top: solid 1.5px rgb(1,1,1,0.15);
-  }
-
-  p{
-    display: flex;
-    gap: 0.3rem;
   }
 }

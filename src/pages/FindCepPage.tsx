@@ -22,32 +22,9 @@ type TypeAddress = {
   uf: string,
   bairro: string,
   localidade: string,
-  logradouro: string
+  logradouro: string,
+  complemento?: string
 }
-
-let mock = [
-  {
-    cep: '08240-660',
-    uf: 'SP',
-    bairro: 'Vila Progresso',
-    localidade: 'São Paulo do Sapucaí',
-    logradouro: 'Rua Para-Chuvisco'
-  },
-  {
-    cep: '08240-660',
-    uf: 'SP',
-    bairro: 'Vila Progresso',
-    localidade: 'São Paulo do Sapucaí',
-    logradouro: 'Rua Para-Chuvisco'
-  },
-  {
-    cep: '08240-660',
-    uf: 'SP',
-    bairro: 'Vila Progresso',
-    localidade: 'São Paulo do Sapucaí',
-    logradouro: 'Rua Para-Chuvisco'
-  },
-]
 
 const FindCepPage = () => {
   const [stateList, setStateList] = useState<TypeState[]>([]);
@@ -78,13 +55,15 @@ const FindCepPage = () => {
   }, [selectedState]);
 
   const searchCep = async () => {
-    setModalOpen(true);
-    return; //tirar
-
     const response = await axios.get(`https://viacep.com.br/ws/${selectedState}/${selectedCity}/${street}/json/`);
     const fetchedAdress: TypeAddress[] = response.data;
 
     setAddress(fetchedAdress);
+
+    if(response.status !== 200){
+      // show error toast
+      return;
+    }
 
     setModalOpen(true);
   }
@@ -98,8 +77,6 @@ const FindCepPage = () => {
   }
 
   const validateFields = () => {
-    return true; //tirar
-
     if (!selectedState || !selectedCity || (!street || street.length < 3)) {
       return false
     }
@@ -122,10 +99,13 @@ const FindCepPage = () => {
         <div className={styles.modalBody}>
           <h3>Resultados da Busca</h3>
           <section className={styles.modalContent}>
-            {mock.map((address) => (
+            { (address.length <= 0) && 
+              <p>Nenhum registro encontrado!</p>
+            }
+            {address.map((address) => (
               <div className={styles.infoBox}>
                 <p>
-                  <b>CEP:</b>
+                  <b>CEP: </b>
                   {address.cep}
                 </p>
                 <p>
@@ -133,11 +113,15 @@ const FindCepPage = () => {
                   {address.logradouro}
                 </p>
                 <p>
-                  <b>Município:</b>
+                  <b>Complemento: </b>
+                  {address.complemento ?? '-'}
+                </p>
+                <p>
+                  <b>Município: </b>
                   {address.localidade}
                 </p>
                 <p>
-                  <b>Código Sei Lá:</b>
+                  <b>Código Sei Lá: </b>
                   {address.cep}
                 </p>
               </div>
@@ -193,7 +177,7 @@ const FindCepPage = () => {
           <span className={styles.buttonContainer}>
             <button
               type="button"
-              className={styles.back}
+              className={`alternative`}
               onClick={e => navigate(-1)}
             >
               Voltar

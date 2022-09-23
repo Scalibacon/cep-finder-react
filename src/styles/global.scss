@@ -30,6 +30,12 @@ button{
   padding: 1rem 1.6rem;
   cursor: pointer;
   transition: filter 0.2s linear;
+
+  &.alternative {
+    color: rgb(var(--theme-color));
+    background-color: white;
+    border: solid 1.5px rgb(var(--theme-color));
+  }
 }
 button:not([disabled]):hover{
   filter: brightness(1.1)
@@ -61,6 +67,7 @@ input:focus{
   align-items: center;
 }
 #pageMain{
+  padding: 1rem 1rem;
   flex: 1;
 }
 
