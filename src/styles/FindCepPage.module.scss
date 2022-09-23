@@ -1,0 +1,43 @@
+.findCep{
+  width: var(--default-page-size);
+  padding: 1.3rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  form{
+    width: 100%;
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.2rem;
+
+    & > div{
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+
+      label{
+        font-weight: 600;
+      }
+    }
+  }
+}
+
+.buttonContainer{
+  width: 100%;
+  margin-top: 1rem;
+  display: flex;
+  gap: 0.5rem;
+
+  button{
+    padding: 0.7rem 1.1rem;
+
+    &.back{
+      color: rgb(var(--theme-color));
+      background-color: white;
+      border: solid 1.5px rgb(var(--theme-color));
+    }
+  }
+}

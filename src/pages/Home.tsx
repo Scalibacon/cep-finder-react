@@ -17,10 +17,10 @@ const Home = () => {
         </div>      
 
         <div className={styles.buttonContainer}>
-          <Link to='/cep'>
+          <Link to='/address'>
             <button>Buscar Endereço</button>
           </Link>
-          <Link to='/address'>
+          <Link to='/cep'>
           <button>Buscar CEP</button>
           </Link>
         </div>

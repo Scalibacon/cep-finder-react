@@ -13,8 +13,8 @@ const Header = () => {
           </span>
         </Link>
         <nav>
-          <Link to="/cep">Buscar Endereço</Link>
-          <Link to="/address">Buscar CEP</Link>
+          <Link to="/address">Buscar Endereço</Link>
+          <Link to="/cep">Buscar CEP</Link>
         </nav>
       </main>
     </header>

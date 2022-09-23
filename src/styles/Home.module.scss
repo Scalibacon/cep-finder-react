@@ -1,5 +1,5 @@
 .home{
-  width: clamp(350px, 100%, 1150px);
+  width: var(--default-page-size);
   padding: 3rem 0;  
 }
 
