@@ -5,6 +5,7 @@ import Header from "../components/Header";
 import styles from '../styles/FindCepPage.module.scss';
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import Modal from "../components/Modal";
+import LoadingScreen from "../components/LoadingScreen";
 
 type TypeState = {
   id: number,
@@ -35,11 +36,15 @@ const FindCepPage = () => {
   const [street, setStreet] = useState('');
   const [address, setAddress] = useState<TypeAddress[]>([]);
   const [modalOpen, setModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
 
   const fetchStates = async () => {
+    setIsLoading(true);    
     const response = await axios.get("https://servicodados.ibge.gov.br/api/v1/localidades/estados?orderBy=nome");
+    setIsLoading(false);
+
     const states: TypeState[] = response.data;
 
     setStateList(states);
@@ -48,14 +53,19 @@ const FindCepPage = () => {
   const fetchCities = useCallback(async () => {
     if (!selectedState) return;
 
+    setIsLoading(true);  
     const response = await axios.get(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${selectedState}/municipios`);
+    setIsLoading(false);  
     const cities: TypeCity[] = response.data;
 
     setCityList(cities);
   }, [selectedState]);
 
   const searchCep = async () => {
+    setIsLoading(true);  
     const response = await axios.get(`https://viacep.com.br/ws/${selectedState}/${selectedCity}/${street}/json/`);
+    setIsLoading(false);  
+    
     const fetchedAdress: TypeAddress[] = response.data;
 
     setAddress(fetchedAdress);
@@ -93,7 +103,8 @@ const FindCepPage = () => {
 
   return (
     <div id="pageWrapper">
-      <Header></Header>
+      <Header/>
+      <LoadingScreen isLoading={isLoading}/>
 
       <Modal isVisible={modalOpen} onClose={setModalOpen}>
         <div className={styles.modalBody}>
