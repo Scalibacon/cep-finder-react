@@ -17,6 +17,21 @@ a{
   text-decoration: none;
   color: inherit;
 }
+button{
+  outline: none;
+  border: none;
+  border-radius: 4px;
+  background: rgb(var(--theme-color));
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 1rem 1.6rem;
+  cursor: pointer;
+  transition: filter 0.2s linear;
+}
+button:hover{
+  filter: brightness(1.1)
+}
 
 #pageWrapper{
   min-height: 100vh;
@@ -28,6 +43,7 @@ a{
 #pageMain{
   flex: 1;
 }
+
 :root{
   --theme-color: 73,23,172;
   --default-text-color: 25,25,25;

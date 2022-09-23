@@ -22,3 +22,9 @@
     color: rgb(var(--default-text-color));
   }
 }
+
+.buttonContainer{
+  margin-top: 1.75rem;
+  display: flex;
+  gap: 0.5rem;
+}

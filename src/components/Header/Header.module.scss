@@ -1,21 +1,21 @@
-.header{
+.header {
   width: 100vw;
   position: relative;
-  padding: 1.5rem 1rem;
+  padding: 0.3rem 1rem;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: rgb(255,255,255);  
-  border-bottom: solid 1.5px rgba(1,1,1,0.1);
+  background: rgb(255, 255, 255);
+  border-bottom: solid 1.5px rgba(1, 1, 1, 0.1);
 
-  & > main{
+  &>main {
     width: clamp(350px, 100%, 1150px);
     display: flex;
     justify-content: space-between;
     gap: 1rem;
   }
 
-  nav{
+  nav {
     display: flex;
     align-items: center;
     gap: 1.5rem;
@@ -24,8 +24,19 @@
   }
 }
 
-.logo{
-  font-size: 1.5rem;
-  font-weight: 800;
-  color: rgb(var(--theme-color));
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+
+  p {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: rgb(var(--theme-color));
+  }
+
+  img {
+    height: 100%;
+    max-height: 75px;
+  }
 }

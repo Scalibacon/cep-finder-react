@@ -1,14 +1,20 @@
 import styles from './Header.module.scss';
+import Logo from '../../assets/images/cepanda.png';
+import { Link } from 'react-router-dom';
 
 const Header = () => {
   return (
     <header className={styles.header}>
       <main>
-        <span className={styles.logo}>CEP Finder!</span>
-
+        <Link to="/">
+          <span className={styles.logo}>
+            <img src={Logo} alt="Logo do Pandinha" />
+            <p>CEPanda!</p>
+          </span>
+        </Link>
         <nav>
-          <a href="/cep">Buscar Endereço</a>
-          <a href="/address">Buscar CEP</a>
+          <Link to="/cep">Buscar Endereço</Link>
+          <Link to="/address">Buscar CEP</Link>
         </nav>
       </main>
     </header>
