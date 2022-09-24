@@ -1,11 +1,13 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import styles from '../styles/FindCepPage.module.scss';
-import { ChangeEvent, useCallback, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useCallback, useEffect, useState } from "react";
 import Modal from "../components/Modal";
 import LoadingScreen from "../components/LoadingScreen";
+import Form from "../components/Form";
+import TypeAddress from "../types/TypeAddress";
 
 type TypeState = {
   id: number,
@@ -16,15 +18,6 @@ type TypeState = {
 type TypeCity = {
   id: number,
   nome: string,
-}
-
-type TypeAddress = {
-  cep: string,
-  uf: string,
-  bairro: string,
-  localidade: string,
-  logradouro: string,
-  complemento?: string
 }
 
 const FindCepPage = () => {
@@ -38,44 +31,63 @@ const FindCepPage = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const navigate = useNavigate();
-
   const fetchStates = async () => {
-    setIsLoading(true);    
-    const response = await axios.get("https://servicodados.ibge.gov.br/api/v1/localidades/estados?orderBy=nome");
-    setIsLoading(false);
+    try {
+      setIsLoading(true);
+      const response = await axios.get("https://servicodados.ibge.gov.br/api/v1/localidades/estados?orderBy=nome");
+      setIsLoading(false);
 
-    const states: TypeState[] = response.data;
+      const states: TypeState[] = response.data;
 
-    setStateList(states);
+      setStateList(states);
+    } catch (error) {
+      if (error instanceof Error) console.log('Error trying to fetch states:', error.message);
+      // show toast
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   const fetchCities = useCallback(async () => {
-    if (!selectedState) return;
+    try {
+      if (!selectedState) return;
 
-    setIsLoading(true);  
-    const response = await axios.get(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${selectedState}/municipios`);
-    setIsLoading(false);  
-    const cities: TypeCity[] = response.data;
+      setIsLoading(true);
+      const response = await axios.get(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${selectedState}/municipios`);
+      setIsLoading(false);
+      const cities: TypeCity[] = response.data;
 
-    setCityList(cities);
+      setCityList(cities);
+    } catch (error) {
+      if (error instanceof Error) console.log('Error trying to fetch cities:', error.message);
+      // show toast
+    } finally {
+      setIsLoading(false);
+    }
   }, [selectedState]);
 
   const searchCep = async () => {
-    setIsLoading(true);  
-    const response = await axios.get(`https://viacep.com.br/ws/${selectedState}/${selectedCity}/${street}/json/`);
-    setIsLoading(false);  
-    
-    const fetchedAdress: TypeAddress[] = response.data;
+    try {
+      setIsLoading(true);
+      const response = await axios.get(`https://viacep.com.br/ws/${selectedState}/${selectedCity}/${street}/json/`);
+      setIsLoading(false);
 
-    setAddress(fetchedAdress);
+      if (response.status !== 200) {
+        console.log('error ' + response.status);
+        // show error toast
+        return;
+      }
 
-    if(response.status !== 200){
-      // show error toast
-      return;
+      const fetchedAdress: TypeAddress[] = response.data;
+
+      setAddress(fetchedAdress);
+      setModalOpen(true);
+    } catch (error) {
+      if (error instanceof Error) console.log('Error trying to fetch CEP:', error.message);
+      // show toast
+    } finally {
+      setIsLoading(false);
     }
-
-    setModalOpen(true);
   }
 
   const handleStateChange = (event: ChangeEvent<HTMLSelectElement>) => {
@@ -84,6 +96,12 @@ const FindCepPage = () => {
 
   const handleCityChange = (event: ChangeEvent<HTMLSelectElement>) => {
     setSelectedCity(event.target.value);
+  }
+
+  const handleFormSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    searchCep();
   }
 
   const validateFields = () => {
@@ -103,18 +121,18 @@ const FindCepPage = () => {
 
   return (
     <div id="pageWrapper">
-      <Header/>
-      <LoadingScreen isLoading={isLoading}/>
+      <Header />
+      <LoadingScreen isLoading={isLoading} />
 
       <Modal isVisible={modalOpen} onClose={setModalOpen}>
         <div className={styles.modalBody}>
           <h3>Resultados da Busca</h3>
           <section className={styles.modalContent}>
-            { (address.length <= 0) && 
+            {(address.length <= 0) &&
               <p>Nenhum registro encontrado!</p>
             }
             {address.map((address) => (
-              <div className={styles.infoBox}>
+              <div className={styles.infoBox} key={address.cep}>
                 <p>
                   <b>CEP: </b>
                   {address.cep}
@@ -132,8 +150,8 @@ const FindCepPage = () => {
                   {address.localidade}
                 </p>
                 <p>
-                  <b>Código Sei Lá: </b>
-                  {address.cep}
+                  <b>Bairro: </b>
+                  {address.bairro}
                 </p>
               </div>
             ))}
@@ -147,7 +165,10 @@ const FindCepPage = () => {
           <span>{"Buscar CEP"}</span>
         </div>
 
-        <form>
+        <Form
+          onSubmit={handleFormSubmit}
+          validateFields={validateFields}
+        >
           <div>
             <label>Estado</label>
             <select
@@ -184,24 +205,7 @@ const FindCepPage = () => {
               onChange={e => setStreet(e.target.value)}
               disabled={!selectedCity} />
           </div>
-
-          <span className={styles.buttonContainer}>
-            <button
-              type="button"
-              className={`alternative`}
-              onClick={e => navigate(-1)}
-            >
-              Voltar
-            </button>
-            <button
-              type="button"
-              disabled={!validateFields()}
-              onClick={searchCep}
-            >
-              Pesquisar
-            </button>
-          </span>
-        </form>
+        </Form>
       </main>
       <Footer />
     </div>
