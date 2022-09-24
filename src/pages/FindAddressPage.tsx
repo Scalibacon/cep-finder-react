@@ -61,11 +61,11 @@ const FindAddressPage = () => {
         <div className={styles.modalBody}>
           <h3>Resultados da Busca</h3>
           <section className={styles.modalContent}>
-            {!address &&
+            {(!address || !address.cep) &&
               <p>Nenhum registro encontrado!</p>
             }
 
-            {address &&
+            {(address && address.cep) &&
               <div className={styles.infoBox}>
                 <p>
                   <b>CEP: </b>
