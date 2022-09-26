@@ -3,6 +3,8 @@ import axios from "axios";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import styles from '../styles/FindCepPage.module.scss';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { ChangeEvent, FormEvent, useCallback, useEffect, useState } from "react";
 import Modal from "../components/Modal";
 import LoadingScreen from "../components/LoadingScreen";
@@ -42,7 +44,7 @@ const FindCepPage = () => {
       setStateList(states);
     } catch (error) {
       if (error instanceof Error) console.log('Error trying to fetch states:', error.message);
-      // show toast
+      toast.error("Não foi possível buscar estados no IBGE");
     } finally {
       setIsLoading(false);
     }
@@ -60,7 +62,8 @@ const FindCepPage = () => {
       setCityList(cities);
     } catch (error) {
       if (error instanceof Error) console.log('Error trying to fetch cities:', error.message);
-      // show toast
+      toast.error("Não foi possível buscar municípios no IBGE");
+
     } finally {
       setIsLoading(false);
     }
@@ -73,9 +76,7 @@ const FindCepPage = () => {
       setIsLoading(false);
 
       if (response.status !== 200) {
-        console.log('error ' + response.status);
-        // show error toast
-        return;
+        throw new Error();
       }
 
       const fetchedAdress: TypeAddress[] = response.data;
@@ -84,7 +85,7 @@ const FindCepPage = () => {
       setModalOpen(true);
     } catch (error) {
       if (error instanceof Error) console.log('Error trying to fetch CEP:', error.message);
-      // show toast
+      toast.error("Não foi possível realizar a busca pelo CEP");
     } finally {
       setIsLoading(false);
     }
@@ -208,6 +209,17 @@ const FindCepPage = () => {
         </Form>
       </main>
       <Footer />
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   )
 }
