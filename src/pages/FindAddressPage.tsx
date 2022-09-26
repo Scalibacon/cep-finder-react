@@ -1,6 +1,8 @@
 import axios from "axios";
 import { FormEvent, useState } from "react";
 import { Link } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Footer from "../components/Footer";
 import Form from "../components/Form";
 import Header from "../components/Header";
@@ -44,12 +46,12 @@ const FindAddressPage = () => {
 
       setAddress(fetchedAdress);
       setModalOpen(true);
-    } catch(error){
-      if(error instanceof Error) console.log('Error trying to fetch address:', error.message);
-      // show toast
+    } catch (error) {
+      if (error instanceof Error) console.log('Error trying to fetch address:', error.message);
+      toast.error("CEP inválido!");
     } finally {
       setIsLoading(false);
-    }    
+    }
   }
 
   return (
@@ -114,6 +116,17 @@ const FindAddressPage = () => {
         </Form>
       </main>
       <Footer />
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   )
 }
